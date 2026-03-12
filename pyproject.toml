@@ -1,0 +1,11 @@
+[project]
+name = "tfs-request-signing"
+version = "0.1.0"
+description = "Sign TFS requests with a private key"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "cryptography>=46.0.5",
+    "dotenv>=0.9.9",
+    "mitmproxy>=12.2.1",
+]
