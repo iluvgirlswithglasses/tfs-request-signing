@@ -82,6 +82,14 @@ def sign_data(data_string, private_key):
     return base64.b64encode(signature).decode("utf-8")
 
 
+def load_recaptcha_token() -> str | None:
+    try:
+        with open(".recaptcha-token") as f:
+            return f.read().strip()
+    except FileNotFoundError:
+        return None
+
+
 def request(flow: http.HTTPFlow) -> None:
     # only process POST/PUT requests with JSON bodies
     if flow.request.method not in ["POST", "PUT"]:
@@ -94,6 +102,14 @@ def request(flow: http.HTTPFlow) -> None:
         # skip if signature already exists
         if "Signature" in data:
             return
+
+        # load the recaptcha token if necessary
+        if (
+            "recaptcha" in data
+            and not data["recaptcha"]
+            and (recaptcha_token := load_recaptcha_token())
+        ):
+            data["recaptcha"] = recaptcha_token
 
         canonical = json_values_to_sorted_string(data)
         signature = sign_data(canonical, PRIVATE_KEY_OBJ)
