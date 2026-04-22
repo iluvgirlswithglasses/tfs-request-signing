@@ -4,7 +4,7 @@ from mitmproxy import http
 
 
 def request(flow: http.HTTPFlow):
-    if not flow.request.pretty_url.endswith("/customer-portal-api/v1/login/new-device"):
+    if not flow.request.pretty_url.endswith("/login/new-device"):
         return
 
     try:
@@ -13,8 +13,8 @@ def request(flow: http.HTTPFlow):
         if not recaptcha:
             return
 
-        with open(".recaptcha-token", "w") as f:
-            f.write(recaptcha)
+        with open(".recaptcha-tokens", "a") as f:
+            f.write(recaptcha + "\n")
 
         # prevent this request to send the recaptcha token
         # because it would invalidate our captcha

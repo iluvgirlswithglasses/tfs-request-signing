@@ -12,17 +12,17 @@ This repository is a toolkit for bypassing API security measures (Request Signin
     - Keys are sorted alphabetically.
     - Keys are converted to `lowerCamelCase` in the canonical string representation.
     - Supports nested objects and arrays.
-- **Injection**: If a request has an empty `recaptcha` field, it attempts to load a token from `.recaptcha-token`.
+- **Injection**: If a login request (`/login/new-device`) has an empty `recaptcha` field, it attempts to pop a token from `.recaptcha-tokens`.
 
 ### 2. Recaptcha Capture (`steal_recaptcha.py`)
-- **Target**: Intercepts requests to `/customer-portal-api/v1/login/new-device`.
-- **Behavior**: Extracts the `recaptcha` token, writes it to `.recaptcha-token`, and **clears the original request body**. This prevents the browser's request from consuming the token, allowing it to be reused by the pentester in another tool.
+- **Target**: Intercepts requests ending with `/login/new-device`.
+- **Behavior**: Extracts the `recaptcha` token, appends it to `.recaptcha-tokens`, and **clears the original request body**. This prevents the browser's request from consuming the token, allowing it to be reused by the pentester in another tool.
 
 ## Key Files
 - `sign_requests.py`: Main signing and injection logic.
 - `steal_recaptcha.py`: Token capture logic.
 - `.env`: (Ignored) Stores `PRIVATE_KEY_B64`.
-- `.recaptcha-token`: (Local only) Temporary storage for captured tokens.
+- `.recaptcha-tokens`: (Local only) Temporary queue for captured tokens.
 
 ## Engineering Standards
 - **Python**: 3.12+, managed via `uv`.

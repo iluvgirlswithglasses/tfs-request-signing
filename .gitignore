@@ -11,4 +11,4 @@ wheels/
 
 # Hehehe
 .env
-.recaptcha-token
+.recaptcha-tokens

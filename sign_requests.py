@@ -84,9 +84,21 @@ def sign_data(data_string, private_key):
 
 def load_recaptcha_token() -> str | None:
     try:
-        with open(".recaptcha-token") as f:
-            return f.read().strip()
-    except FileNotFoundError:
+        if not os.path.exists(".recaptcha-tokens"):
+            return None
+
+        with open(".recaptcha-tokens", "r") as f:
+            lines = f.readlines()
+
+        if not lines:
+            return None
+
+        token = lines[0].strip()
+        with open(".recaptcha-tokens", "w") as f:
+            f.writelines(lines[1:])
+
+        return token
+    except Exception:
         return None
 
 
@@ -104,8 +116,10 @@ def request(flow: http.HTTPFlow) -> None:
             return
 
         # load the recaptcha token if necessary
+        is_login = flow.request.pretty_url.endswith("/login/new-device")
         if (
-            "recaptcha" in data
+            is_login
+            and "recaptcha" in data
             and not data["recaptcha"]
             and (recaptcha_token := load_recaptcha_token())
         ):

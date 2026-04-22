@@ -55,7 +55,7 @@ Point your API client (e.g., Hoppscotch) to `http://localhost:8080`.
 
 - **Signing Algorithm**: RSASSA-PKCS1-v1\_5 with SHA-512.
 - **Canonicalization**: Keys are sorted alphabetically (case-insensitive) and values are concatenated. Specific fields like `Signature` and `recaptcha` are excluded during signing.
-- **Inter-process Communication**: The stealer saves tokens to a local `.recaptcha-token` file, which the signer monitors for injection.
+- **Inter-process Communication**: The stealer saves tokens to a local `.recaptcha-tokens` file, which the signer monitors for injection.
 
 ## Documentation
 For a detailed guide on the pentesting workflow (in Vietnamese), refer to `doc/pentest-guide.pdf` or the source `doc/main.typ`.
